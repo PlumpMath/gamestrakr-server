@@ -2,9 +2,11 @@
   "name": "gamer-lyfe-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "start.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --use_strict start.js"
   },
   "keywords": [],
   "author": "",

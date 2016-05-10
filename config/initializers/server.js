@@ -6,20 +6,16 @@ const express = require("express"),
 
 const env = process.env;
 
-module.exports = function(cb){
+module.exports = function(db){
   const app = express();
   app.use(express.static(__dirname + "/public"));
   app.use(bodyParser.json());
 
-  routes(app);
+  routes(app, db);
 
   // Initialize the app.
   const server = app.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
     const port = server.address().port;
     console.log("App now running on port", port);
   });
-
-  if (cb){
-    return cb();
-  }
 };

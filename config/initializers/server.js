@@ -11,6 +11,16 @@ module.exports = function(db){
   app.use(express.static(__dirname + "/public"));
   app.use(bodyParser.json());
 
+  // Error handler
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({
+      message: err.message,
+      error: (env.NODE_ENV === 'development' ? err : {})
+    });
+    next(err);
+  });
+
   routes(app, db);
 
   // Initialize the app.

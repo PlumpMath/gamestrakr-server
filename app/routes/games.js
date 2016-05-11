@@ -21,7 +21,7 @@ module.exports = function(db){
       .query({
         api_key: process.env.GIANTBOMB_KEY,
         format: "json",
-        field_list: "name,original_release_date",
+        field_list: "name,original_release_date,image",
         sort: "original_release_date:desc",
         filter: `original_release_date:1700-01-01|${todayDateTime}`,
         limit: 50

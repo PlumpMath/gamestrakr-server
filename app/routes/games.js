@@ -21,7 +21,7 @@ module.exports = function(db){
       .query({
         api_key: process.env.GIANTBOMB_KEY,
         format: "json",
-        field_list: "name,original_release_date,image",
+        field_list: "name,original_release_date,image,deck,description,platforms,site_detail_url",
         sort: "original_release_date:desc",
         filter: `original_release_date:1700-01-01|${todayDateTime}`,
         limit: 50
@@ -34,13 +34,6 @@ module.exports = function(db){
         }
       });
   });
-
-  // router.get('/currently_playing', function(req, res){
-    // db.collection(GAMES_COLLECTION).find({}).toArray(function(err, docs) {
-    //   res.status(200).json(docs);
-    // });
-    //
-  // });
 
   return router;
 };

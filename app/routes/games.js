@@ -34,7 +34,7 @@ module.exports = function(db){
       });
   });
 
-  router.get('/upcoming', function(req, res){
+  router.get('/upcoming_releases', function(req, res){
     const tmrDateTime = moment().add(1, 'days').format('YYYY-MM-DD');
     request
       .get("http://www.giantbomb.com/api/games")

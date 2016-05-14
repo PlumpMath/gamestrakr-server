@@ -1,8 +1,10 @@
-const express = require("express"),
- path = require("path"),
- bodyParser = require("body-parser"),
- mongodb = require("mongodb");
- routes = require("../../app/routes/index");
+const express = require('express'),
+ path = require('path'),
+ bodyParser = require('body-parser'),
+ mongodb = require('mongodb'),
+ passport = require('passport'),
+ session = require('passport-session'),
+ routes = require('../../app/routes/index');
 
 const env = process.env;
 
@@ -20,6 +22,14 @@ module.exports = function(db){
     });
     next(err);
   });
+
+  app.use(session({
+    secret: 'yo$',
+    resave: true,
+    saveUninitialized: true
+  }));
+  app.use(passport.initialize);
+  app.use(passport.session);
 
   // allow CORS
   app.all('*', function(req, res, next) {

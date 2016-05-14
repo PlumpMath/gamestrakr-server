@@ -1,7 +1,3 @@
-// TODO: set up user accounts with oauth
-// TODO: give user accounts ability to add currently playing
-// TODO: cache giantbomb requests(superagent-cache, redis?)
-
 const express = require("express")
 request = require("superagent"),
   _ = require("lodash"),

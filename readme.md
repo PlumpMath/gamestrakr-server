@@ -9,3 +9,8 @@
 ### Start mongodb sever locally
 `mongod --dbpath=./data`
 
+##TODO
+* set up user accounts with oauth
+* give user accounts ability to add currently playing
+* cache giantbomb requests(superagent-cache, redis?)
+

@@ -3,7 +3,7 @@ const express = require('express'),
  bodyParser = require('body-parser'),
  mongodb = require('mongodb'),
  passport = require('passport'),
- session = require('passport-session'),
+ session = require('express-session'),
  routes = require('../../app/routes/index');
 
 const env = process.env;
@@ -28,8 +28,8 @@ module.exports = function(db){
     resave: true,
     saveUninitialized: true
   }));
-  app.use(passport.initialize);
-  app.use(passport.session);
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // allow CORS
   app.all('*', function(req, res, next) {

@@ -1,9 +1,9 @@
-const express = require("express")
-request = require("superagent"),
-  _ = require("lodash"),
+const express = require('express'),
+  request = require('superagent'),
+  _ = require('lodash'),
   moment = require('moment'),
   router = express.Router(),
-  GAMES_COLLECTION = "games";
+  GAMES_COLLECTION = 'games';
 
 require('dotenv').load();
 

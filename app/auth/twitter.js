@@ -1,7 +1,6 @@
 const passport = require('passport'),
   TwitterStrategy = require('passport-twitter'),
-  User = require('../models/user'),
-  init = require('./init');
+  User = require('../models/user');
 
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
@@ -15,7 +14,8 @@ function(token, tokenSecret, profile, done){
 
   const updates = {
     name: profile.displayName,
-    someID: profile.id
+    email: profile.email,
+    twitterId: profile.id
   };
 
   const options = {
@@ -30,7 +30,5 @@ function(token, tokenSecret, profile, done){
     }
   });
 }));
-
-init();
 
 module.exports = passport;

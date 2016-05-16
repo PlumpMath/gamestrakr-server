@@ -7,6 +7,19 @@ const express = require('express'),
 
 require('dotenv').load();
 
+module.exports = function(db){
+
+  router.get('/', function(req, res){
+    if(req.params.games_type == 'upcoming'){
+      fetchUpcomingReleases(res);
+    } else {
+      fetchRecentReleases(res);
+    }
+  });
+
+  return router;
+};
+
 function fetchUpcomingReleases(res){
   const tmrDateTime = moment().add(1, 'days').format('YYYY-MM-DD');
   request
@@ -21,9 +34,9 @@ function fetchUpcomingReleases(res){
     })
     .end(function(err, data){
       if (err) {
-        console.log(err, "err");
+        return res.status(404).send({message: "Could not fetch upcoming releases."});
       } else if (_.has(data, "res.body.results")){
-        res.status(200).json(data.res.body.results);
+        return res.status(200).json(data.res.body.results);
       }
     });
 }
@@ -42,23 +55,10 @@ function fetchRecentReleases(res){
     })
     .end(function(err, data){
       if (err) {
-        console.log(err, "err");
+        return res.status(404).send({message: "Could not fetch recent releases."});
       } else if (_.has(data, "res.body.results")){
-        res.status(200).json(data.res.body.results);
+        return res.status(200).json(data.res.body.results);
       }
     });
 }
-
-module.exports = function(db){
-
-  router.get('/', function(req, res){
-    if(req.params.games_type == 'upcoming'){
-      fetchUpcomingReleases(res);
-    } else {
-      fetchRecentReleases(res);
-    }
-  });
-
-  return router;
-};
 

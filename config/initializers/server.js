@@ -22,14 +22,12 @@ module.exports = function(db){
     });
     next(err);
   });
-
   app.use(session({
-    secret: 'yo$',
+    secret: process.env.EXPRESS_SESSION_SECRET,
     resave: true,
     saveUninitialized: true
   }));
   app.use(passport.initialize());
-  app.use(passport.session());
 
   // allow CORS
   app.all('*', function(req, res, next) {

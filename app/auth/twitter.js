@@ -14,7 +14,6 @@ function(token, tokenSecret, profile, done){
 
   const updates = {
     name: profile.displayName,
-    email: profile.email,
     twitterId: profile.id
   };
 

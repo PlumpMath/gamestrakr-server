@@ -7,7 +7,7 @@ const express = require('express'),
 function authCallback(req, res){
   const token = jwt.sign(req.user, process.env.JWT_SECRET, {expiresIn: "7d"});
 
-  return res.redirect(`${process.env.CLIENT_URL}/auth?token=${token}`);
+  return res.redirect(`${process.env.CLIENT_URL}/#/auth_success?token=${token}&name=${req.user.name}`);
   // return res.json({
   //   success: true,
   //   message: 'Heres your token!',

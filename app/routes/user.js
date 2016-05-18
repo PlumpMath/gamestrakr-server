@@ -4,9 +4,10 @@ const express = require('express'),
   User = require('../models/user');
 
 module.exports = function(){
-  router.get('/info', authenticate, function(req, res){
-    return res.status(200).send({message: 'user info'});
-  });
+  // router.get('/info', authenticate, function(req, res){
+  //   return res.status(200).send({message: 'user info'});
+  // });
+  //
 
   return router;
 };

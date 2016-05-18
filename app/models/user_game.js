@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const UserGameSchema = mongoose.Schema({
-  giantBombId: {type:Number, required: true},
+  giantBombUrl: String,
   status: {
     type: String,
     enum: ['playing', 'planning', 'completed', 'on-hold', 'dropped'],

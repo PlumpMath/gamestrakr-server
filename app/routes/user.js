@@ -21,8 +21,10 @@ module.exports = function(){
   });
 
   router.post('/games', authenticate, function(req, res){
-    debugger;
-    User.findByIdAndUpdate(req.decoded.userId, {$push: {games: req.body.game}});
+    User.findByIdAndUpdate(req.decoded.userId, {$addToSet: {games: req.body.game}}, function(err, doc){
+      if (err) return res.status(404).json({message: 'Error adding user game'});
+      else return res.status(200).json({message: 'Success'});
+    });
   });
 
   return router;

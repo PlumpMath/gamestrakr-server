@@ -1,6 +1,6 @@
 const passport = require('passport'),
   TwitterStrategy = require('passport-twitter'),
-  User = require('../models/user');
+  User = require('../models/user').User;
 
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,

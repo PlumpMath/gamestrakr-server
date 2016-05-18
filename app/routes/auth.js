@@ -5,14 +5,8 @@ const express = require('express'),
   passportFacebook = require('../auth/facebook');
 
 function authCallback(req, res){
-  const token = jwt.sign(req.user, process.env.JWT_SECRET, {expiresIn: "7d"});
-
+  const token = jwt.sign({userId: req.user.id}, process.env.JWT_SECRET, {expiresIn: "7d"});
   return res.redirect(`${process.env.CLIENT_URL}/#/auth_success?token=${token}&name=${req.user.name}`);
-  // return res.json({
-  //   success: true,
-  //   message: 'Heres your token!',
-  //   token: token
-  // });
 }
 
 module.exports = function(){

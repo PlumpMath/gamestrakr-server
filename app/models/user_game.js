@@ -6,7 +6,9 @@ const UserGameSchema = mongoose.Schema({
     type: String,
     enum: ['playing', 'planning', 'completed', 'on-hold', 'dropped'],
     required: true
-  }
+  },
+  name: {type: String, required: true},
+  imageUrl: String
 });
 
 const UserGame = mongoose.model('UserGame', UserGameSchema);

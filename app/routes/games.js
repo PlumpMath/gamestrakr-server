@@ -1,11 +1,21 @@
 const express = require('express'),
   request = require('superagent'),
+  redisModule = require('cache-service-redis'),
   _ = require('lodash'),
   moment = require('moment'),
   router = express.Router(),
   GAMES_COLLECTION = 'games';
 
 require('dotenv').load();
+
+if(process.env.REDIS_URL){
+  var redisCache = new redisModule({redisUrl: process.env.REDIS_URL});
+} else {
+  var redisCache = new redisModule({redisData: {port: '6379', host: '127.0.0.1'}});
+}
+
+const cacheDefaults = {cacheWhenEmpty: false, expiration: 86400};
+require('superagent-cache')(request, redisCache, cacheDefaults);
 
 module.exports = function(db){
 
@@ -35,7 +45,7 @@ function fetchUpcomingReleases(res, limit){
     .end(function(err, data){
       if (err) {
         return res.status(404).send({message: "Could not fetch upcoming releases."});
-      } else if (_.has(data, "res.body.results")){
+      } else if (_.has(data, "body.results")){
         return res.status(200).json(data.res.body.results);
       }
     });
@@ -56,8 +66,8 @@ function fetchRecentReleases(res, limit){
     .end(function(err, data){
       if (err) {
         return res.status(404).send({message: "Could not fetch recent releases."});
-      } else if (_.has(data, "res.body.results")){
-        return res.status(200).json(data.res.body.results);
+      } else if (_.has(data, "body.results")){
+        return res.status(200).json(data.body.results);
       }
     });
 }

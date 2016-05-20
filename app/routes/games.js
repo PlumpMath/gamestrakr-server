@@ -20,10 +20,16 @@ require('superagent-cache')(request, redisCache, cacheDefaults);
 module.exports = function(db){
 
   router.get('/', function(req, res){
-    if(req.params.games_type == 'upcoming'){
-      fetchUpcomingReleases(res, req.query.limit);
-    } else {
-      fetchRecentReleases(res, req.query.limit);
+    switch(req.query.games_type) {
+      case('upcoming'):
+        fetchUpcomingReleases(res, req.query.limit);
+        break;
+      case('recent'):
+        fetchRecentReleases(res, req.query.limit);
+        break;
+      default:
+        return res.status(404).send({message: "Require games_type query param"});
+        break;
     }
   });
 

@@ -40,7 +40,7 @@ module.exports = function(db){
   routes(app, db);
 
   // Initialize the app.
-  const server = app.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
+  const server = app.listen(env.NODE_PORT || 3001, env.NODE_IP || 'localhost', function () {
     const port = server.address().port;
     console.log("App now running on port", port);
   });

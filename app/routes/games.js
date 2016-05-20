@@ -52,7 +52,7 @@ function fetchUpcomingReleases(res, limit){
       if (err) {
         return res.status(404).send({message: "Could not fetch upcoming releases."});
       } else if (_.has(data, "body.results")){
-        return res.status(200).json(data.res.body.results);
+        return res.status(200).json(data.body.results);
       }
     });
 }

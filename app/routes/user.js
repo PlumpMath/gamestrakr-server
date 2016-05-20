@@ -1,7 +1,7 @@
 const express = require('express'),
   router = express.Router(),
   authenticate = require('../auth/jwt_middleware'),
-  User = require('../models/user').User
+  User = require('../models/user').User,
   _ = require('lodash');
 
 function findUser(req, res, next) {

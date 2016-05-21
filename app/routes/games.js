@@ -34,21 +34,18 @@ module.exports = function(db){
   });
 
   router.post('/user', authenticate, findUser, function(req, res){
-    const reqGame = req.body.game;
-
     User.findById(req.decoded.userId, function(err, doc){
-      if(doc && doc.games){
-        const existingGame = _.find(doc.games, {name: reqGame.name})
-        if (existingGame){
-          const updatedGame = _.merge(existingGame, reqGame);
-          doc.games[existingGame] = updatedGame;
-        } else {
-          doc.games.push(reqGame);
-        }
-
-        doc.save();
+      if(doc){
+        if(req.body.game) doc.addGame(req.body.game)
+        else if(req.body.games) doc.addGames(req.body.games);
       }
+
+      doc.save(function(err, doc){
+        if(err) res.status(404).json(err);
+        else res.status(200);
+      });
     });
+
   });
 
   return router;

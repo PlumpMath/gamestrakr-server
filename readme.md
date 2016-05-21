@@ -1,4 +1,4 @@
-# GamerLyfe Server
+# GamesTrakr Server
 ## Dev Notes
 ### Start node sever locally
 `node start.js`
@@ -8,8 +8,4 @@
 `NODE_ENV='development'`
 ### Start mongodb sever locally
 `mongod --dbpath=./data`
-
-## TODO
-* give user accounts ability to add currently playing
-* cache giantbomb requests(superagent-cache, redis?)
 

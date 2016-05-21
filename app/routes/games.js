@@ -4,6 +4,8 @@ const express = require('express'),
   _ = require('lodash'),
   moment = require('moment'),
   router = express.Router(),
+  authenticate = require('../auth/jwt_middleware'),
+  User = require('../models/user').User,
   GAMES_COLLECTION = 'games';
 
 require('dotenv').load();
@@ -18,23 +20,50 @@ const cacheDefaults = {cacheWhenEmpty: false, expiration: 86400};
 require('superagent-cache')(request, redisCache, cacheDefaults);
 
 module.exports = function(db){
+  router.get('/upcoming', function(req, res){
+    fetchUpcomingReleases(res, req.query.limit);
+  });
 
-  router.get('/', function(req, res){
-    switch(req.query.games_type) {
-      case('upcoming'):
-        fetchUpcomingReleases(res, req.query.limit);
-        break;
-      case('recent'):
-        fetchRecentReleases(res, req.query.limit);
-        break;
-      default:
-        return res.status(404).send({message: "Require games_type query param"});
-        break;
-    }
+  router.get('/recent', function(req, res){
+    fetchRecentReleases(res, req.query.limit);
+  });
+
+  router.get('/user', authenticate, findUser, function(req, res){
+    const games = req.user.games;
+    return res.status(200).json(games);
+  });
+
+  router.post('/user', authenticate, findUser, function(req, res){
+    const reqGame = req.body.game;
+
+    User.findById(req.decoded.userId, function(err, doc){
+      if(doc && doc.games){
+        const existingGame = _.find(doc.games, {name: reqGame.name})
+        if (existingGame){
+          const updatedGame = _.merge(existingGame, reqGame);
+          doc.games[existingGame] = updatedGame;
+        } else {
+          doc.games.push(reqGame);
+        }
+
+        doc.save();
+      }
+    });
   });
 
   return router;
 };
+
+function findUser(req, res, next) {
+  User.findById(req.decoded.userId, function(err, doc){
+    if(err) {
+      return res.status(404).json({message: 'Failed to get user.'});
+    } else {
+      req.user = doc;
+      next();
+    }
+  });
+}
 
 function fetchUpcomingReleases(res, limit){
   const tmrDateTime = moment().add(1, 'days').format('YYYY-MM-DD');

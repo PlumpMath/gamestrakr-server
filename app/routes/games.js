@@ -21,11 +21,11 @@ require('superagent-cache')(request, redisCache, cacheDefaults);
 
 module.exports = function(db){
   router.get('/upcoming', function(req, res){
-    fetchUpcomingReleases(res, req.query.limit);
+    fetchUpcomingReleases(res, req.query);
   });
 
   router.get('/recent', function(req, res){
-    fetchRecentReleases(res, req.query.limit);
+    fetchRecentReleases(res, req.query);
   });
 
   router.get('/user', authenticate, findUser, function(req, res){
@@ -62,8 +62,12 @@ function findUser(req, res, next) {
   });
 }
 
-function fetchUpcomingReleases(res, limit){
+function fetchUpcomingReleases(res, query){
   const tmrDateTime = moment().add(1, 'days').format('YYYY-MM-DD');
+  const page = query.page || 0;
+  const limit = query.limit || 16
+  const offset = page * limit;
+
   request
     .get("http://www.giantbomb.com/api/games")
     .query({
@@ -72,7 +76,8 @@ function fetchUpcomingReleases(res, limit){
       field_list: "api_detail_url,name,expected_release_day,expected_release_month,expected_release_quarter,expected_release_year,image,deck,description,platforms,site_detail_url",
       sort: "original_release_date:asc",
       filter: `original_release_date:${tmrDateTime}|2018-12-00`,
-      limit: limit || 20
+      limit: limit,
+      offset: offset
     })
     .end(function(err, data){
       if (err) {
@@ -83,8 +88,12 @@ function fetchUpcomingReleases(res, limit){
     });
 }
 
-function fetchRecentReleases(res, limit){
+function fetchRecentReleases(res, query){
   const todayDateTime = moment().format('YYYY-MM-DD');
+  const page = parseInt(query.page || 0);
+  const limit = parseInt(query.limit || 16);
+  const offset = page * limit;
+
   request
     .get("http://www.giantbomb.com/api/games")
     .query({
@@ -93,7 +102,8 @@ function fetchRecentReleases(res, limit){
       field_list: "api_detail_url,name,original_release_date,image,deck,description,platforms,site_detail_url",
       sort: "original_release_date:desc",
       filter: `original_release_date:1700-01-01|${todayDateTime}`,
-      limit: limit || 20
+      limit: limit,
+      offset: offset
     })
     .end(function(err, data){
       if (err) {

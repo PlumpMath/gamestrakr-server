@@ -19,6 +19,8 @@ if(process.env.REDIS_URL){
 const cacheDefaults = {cacheWhenEmpty: false, expiration: 86400};
 require('superagent-cache')(request, redisCache, cacheDefaults);
 
+const userRoutes = ['/playing', '/planning', '/completed', '/onHold', '/dropped'];
+
 module.exports = function(db){
   router.get('/upcoming', function(req, res){
     fetchUpcomingReleases(res, req.query);
@@ -28,24 +30,22 @@ module.exports = function(db){
     fetchRecentReleases(res, req.query);
   });
 
-  router.get('/user', authenticate, findUser, function(req, res){
-    const games = req.user.games;
+  router.get(userRoutes, authenticate, findUser, function(req, res){
+    const games = req.user.gamesByStatus(req.path.slice(1));
     return res.status(200).json(games);
   });
 
   router.post('/user', authenticate, findUser, function(req, res){
-    User.findById(req.decoded.userId, function(err, doc){
-      if(doc){
-        if(req.body.game) doc.addGame(req.body.game)
-        else if(req.body.games) doc.addGames(req.body.games);
-      }
+    const user = req.user;
+    if(user){
+      if(req.body.game) user.addGame(req.body.game)
+      else if(req.body.games) user.addGames(req.body.games);
 
-      doc.save(function(err, doc){
+      user.save(function(err, doc){
         if(err) res.status(404).json(err);
         else res.status(200);
       });
-    });
-
+    }
   });
 
   return router;
@@ -113,4 +113,3 @@ function fetchRecentReleases(res, query){
       }
     });
 }
-

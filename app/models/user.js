@@ -25,6 +25,10 @@ UserSchema.methods.addGames = function(games, cb){
   });
 };
 
+UserSchema.methods.gamesByStatus = function(status, cb){
+  return _.filter(this.games, {'status': status});
+}
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = {UserSchema, User};

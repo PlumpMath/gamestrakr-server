@@ -73,7 +73,7 @@ function fetchUpcomingReleases(res, query){
     .query({
       api_key: process.env.GIANTBOMB_KEY,
       format: "json",
-      field_list: "api_detail_url,name,expected_release_day,expected_release_month,expected_release_quarter,expected_release_year,image,deck,description,platforms,site_detail_url",
+      field_list: "api_detail_url,name,expected_release_day,expected_release_month,expected_release_quarter,expected_release_year,image",
       sort: "original_release_date:asc",
       filter: `original_release_date:${tmrDateTime}|2018-12-00`,
       limit: limit,
@@ -99,7 +99,7 @@ function fetchRecentReleases(res, query){
     .query({
       api_key: process.env.GIANTBOMB_KEY,
       format: "json",
-      field_list: "api_detail_url,name,original_release_date,image,deck,description,platforms,site_detail_url",
+      field_list: "api_detail_url,name,original_release_date,image",
       sort: "original_release_date:desc",
       filter: `original_release_date:1700-01-01|${todayDateTime}`,
       limit: limit,

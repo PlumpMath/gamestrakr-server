@@ -6,7 +6,7 @@ const express = require('express'),
 
 function authCallback(req, res){
   const token = jwt.sign({userId: req.user.id}, process.env.JWT_SECRET, {expiresIn: "7d"});
-  return res.redirect(`${process.env.CLIENT_URL}/#/auth_success?token=${token}&name=${req.user.name}`);
+  return res.redirect(`${process.env.CLIENT_URL}/#/auth/success?token=${token}&name=${req.user.name}`);
 }
 
 module.exports = function(){

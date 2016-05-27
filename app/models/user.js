@@ -1,5 +1,5 @@
 const mongoose = require('mongoose'),
-  GameSchema = require('./user_game').UserGameSchema,
+  GameSchema = require('./game').GameSchema,
   _ = require('lodash');
 
 const UserSchema = new mongoose.Schema({
@@ -25,8 +25,8 @@ UserSchema.methods.addGames = function(games, cb){
   });
 };
 
-UserSchema.methods.gamesByStatus = function(status, cb){
-  return _.filter(this.games, {'status': status});
+UserSchema.methods.gamesByType = function(type, cb){
+  return _.filter(this.games, {'type': type});
 }
 
 const User = mongoose.model('User', UserSchema);

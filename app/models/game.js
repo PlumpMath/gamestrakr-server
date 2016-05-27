@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+
+const GameSchema = mongoose.Schema({
+  apiDetailUrl: {type: String, required: true},
+  type: {
+    type: String,
+    enum: ['playing', 'planning', 'completed', 'onHold', 'dropped'],
+    required: true
+  },
+  name: {type: String, required: true},
+  image: Object
+});
+
+const Game = mongoose.model('Game', GameSchema);
+
+module.exports = {GameSchema, Game};

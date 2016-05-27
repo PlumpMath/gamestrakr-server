@@ -24,7 +24,7 @@ const userRoutes = ['/playing', '/planning', '/completed', '/onHold', '/dropped'
 module.exports = function(db){
   router.get('/upcoming', function(req, res){
     const tmrDateTime = moment().add(1, 'days').format('YYYY-MM-DD')
-    const page = req.query.page || 0;
+    const page = req.query.page || 0
     const limit = req.query.limit || 16
     const offset = page * limit
 
@@ -73,7 +73,7 @@ module.exports = function(db){
       })
       .end(function(err, data){
         if (err) {
-          return res.status(404).send({message: "Could not fetch recent releases."});
+          return res.status(404).send({message: "Could not fetch recent releases."})
         } else if (_.has(data, "body.results")){
           return res
             .links({
@@ -84,37 +84,44 @@ module.exports = function(db){
             .status(200)
         }
       })
-  });
+  })
 
   router.get(userRoutes, authenticate, findUser, function(req, res){
-    const games = req.user.gamesByStatus(req.path.slice(1));
-    return res.status(200).json(games);
-  });
+    const games = req.user.gamesByType(req.path.slice(1))
+    return res.status(200).json(games)
+  })
 
-  router.post('/user', authenticate, findUser, function(req, res){
-    const user = req.user;
+  router.post(userRoutes, authenticate, findUser, function(req, res){
+    const user = req.user
     if(user){
-      if(req.body.game) user.addGame(req.body.game)
-      else if(req.body.games) user.addGames(req.body.games);
+			if(req.body.game){
+				const type = req.path.slice(1)
+				const game = Object.assign({}, req.body.game, {type: type})
+				user.addGame(game)
+				// else if(req.body.games) user.addGames(req.body.games)
 
-      user.save(function(err, doc){
-        if(err) res.status(404).json(err);
-        else res.status(200);
-      });
+				user.save(function(err, doc){
+					if(err){
+						return res.status(404).json(err)
+					} else{
+						return res.status(200).json([game])
+					}
+				})
+			}
     }
-  });
+  })
 
-  return router;
-};
+  return router
+}
 
 function findUser(req, res, next) {
   User.findById(req.decoded.userId, function(err, doc){
     if(err) {
-      return res.status(404).json({message: 'Failed to get user.'});
+      return res.status(404).json({message: 'Failed to get user.'})
     } else {
-      req.user = doc;
-      next();
+      req.user = doc
+      next()
     }
-  });
+  })
 }
 

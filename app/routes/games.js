@@ -49,7 +49,6 @@ module.exports = function(db){
               prev: `/games/recent?page=${(page-1) || 0}`
             })
             .json(data.body.results)
-            .status(200)
         }
       })
   })
@@ -81,7 +80,6 @@ module.exports = function(db){
               prev: `/games/recent?page=${(page-1) || 0}`
             })
             .json(data.body.results)
-            .status(200)
         }
       })
   })

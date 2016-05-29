@@ -21,7 +21,7 @@ module.exports = function(){
              (req, res) => authCallback(req, res));
 
   router.get('/failure', function(req, res){
-    return res.redirect(`${process.env.CLIENT_URL}/#/auth_failure`);
+    return res.redirect(`${process.env.CLIENT_URL}#/auth_failure`);
   });
 
   return router;

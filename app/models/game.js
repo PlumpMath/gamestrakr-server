@@ -8,7 +8,10 @@ const GameSchema = mongoose.Schema({
     required: true
   },
   name: {type: String, required: true},
-  image: Object
+  image: Object,
+	deck: String,
+	description: String,
+	platforms: Array
 });
 
 const Game = mongoose.model('Game', GameSchema);

@@ -22,6 +22,27 @@ require('superagent-cache')(request, redisCache, cacheDefaults)
 const userRoutes = ['/playing', '/planning', '/completed', '/onHold', '/dropped']
 
 module.exports = function(db){
+	router.get('/by_name', function(req, res){
+		const name = req.query.name
+    request
+      .get("http://www.giantbomb.com/api/search")
+      .query({
+        api_key: process.env.GIANTBOMB_KEY,
+        format: "json",
+				query: name,
+        field_list: "api_detail_url,name,original_release_date,image,deck,description,platforms",
+				limit: 5,
+				resource_type: 'game'
+			})
+      .end(function(err, data){
+        if (err) {
+          return res.status(404).send({message: `Could not fetch game, ${name}`})
+        } else if (_.has(data, "body.results")) {
+          return res .json(data.body.results)
+        }
+      })
+	})
+
   router.get('/upcoming', function(req, res){
     const tmrDateTime = moment().add(1, 'days').format('YYYY-MM-DD')
     const page = req.query.page || 0
@@ -33,7 +54,7 @@ module.exports = function(db){
       .query({
         api_key: process.env.GIANTBOMB_KEY,
         format: "json",
-        field_list: "api_detail_url,name,expected_release_day,expected_release_month,expected_release_quarter,expected_release_year,image",
+        field_list: "api_detail_url,name,expected_release_day,expected_release_month,expected_release_quarter,expected_release_year,image,deck,description,platforms",
         sort: "original_release_date:asc",
         filter: `original_release_date:${tmrDateTime}|2018-12-00`,
         limit: limit,
@@ -64,7 +85,7 @@ module.exports = function(db){
       .query({
         api_key: process.env.GIANTBOMB_KEY,
         format: "json",
-        field_list: "api_detail_url,name,original_release_date,image",
+        field_list: "api_detail_url,name,original_release_date,image,deck,description,platforms",
         sort: "original_release_date:desc",
         filter: `original_release_date:1700-01-01|${todayDateTime}`,
         limit: limit,

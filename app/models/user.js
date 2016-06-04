@@ -3,15 +3,15 @@ const mongoose = require('mongoose'),
   _ = require('lodash');
 
 const UserSchema = new mongoose.Schema({
-  name: {type: String, required: true},
+  name: { type: String, required: true },
   twitterId: String,
   facebookId: String,
-  games: [GameSchema]
+  games: [GameSchema],
 });
 
-UserSchema.methods.addGame = function(game, cb){
-  const existingGame = _.find(this.games, {name: game.name})
-  if (existingGame){
+UserSchema.methods.addGame = function (game, cb) {
+  const existingGame = _.find(this.games, { name: game.name });
+  if (existingGame) {
     const updatedGame = _.merge(existingGame, game);
     this.games[existingGame] = updatedGame;
   } else {
@@ -19,16 +19,16 @@ UserSchema.methods.addGame = function(game, cb){
   }
 };
 
-UserSchema.methods.addGames = function(games, cb){
-  games.forEach(function(game){
+UserSchema.methods.addGames = function (games, cb) {
+  games.forEach(function (game) {
     this.addGame(game);
   });
 };
 
-UserSchema.methods.gamesByType = function(type, cb){
-  return _.filter(this.games, {'type': type});
-}
+UserSchema.methods.gamesByType = function (type, cb) {
+  return _.filter(this.games, { 'type': type });
+};
 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = {UserSchema, User};
+module.exports = { UserSchema, User };
